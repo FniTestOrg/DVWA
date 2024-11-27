@@ -4,13 +4,27 @@ on:
   push:
     branches:
       - master
+env:
+  AWS_REGION : 'us-east-1'
 
+permissions:
+      id-token: write   # This is required for requesting the JWT
+      contents: read
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v1.7.0
+        with:
+          role-to-assume: arn:aws:iam::391412731099:oidc-provider/token.actions.githubusercontent.com
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Sts GetCallerIdentity
+        run: |
+          aws sts get-caller-identity    
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis

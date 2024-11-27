@@ -22,9 +22,13 @@ jobs:
           role-to-assume: arn:aws:iam::391412731099:role/github-fnitest-org-idp-role
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ env.AWS_REGION }}
-      - name: Sts GetCallerIdentity
-        run: |
-          aws sts get-caller-identity    
+      - name: Add public IP to AWS security group
+        uses: sohelamin/aws-security-group-add-ip-action@master
+        with:
+          aws-security-group-id: sg-0253105e7e32e1470
+          port: '443'
+          protocol: 'tcp'
+          description: 'GitHub Action'   
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis

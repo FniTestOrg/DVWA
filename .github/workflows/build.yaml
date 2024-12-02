@@ -27,7 +27,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
       - name: Remove all unused IP addresses
         run: |
-          GROUP_ID="<security-group-id>"
+          GROUP_ID="sg-0253105e7e32e1470"
 
           RULES=$(aws ec2 describe-security-groups \
               --group-ids "$GROUP_ID" \
